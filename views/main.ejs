@@ -1,0 +1,122 @@
+<!-- main.ejs -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Page</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200..1000;1,200..1000&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.css">
+</head>
+
+<body>
+
+    <div class="all">
+        <form action="/" method="post" class="arama">
+            <input type="text" id="userId" name="userId" placeholder="Discord ID" required>
+            <button class="ara-btn" type="submit">Lookup</button>
+        </form>
+
+        <div class="main">
+            <div id="infoMessage" style="display: none;">
+                <p>Lütfen bir adı giriniz.</p>
+            </div>
+
+            <% if (repositories) { %>
+                <div class="main-top">
+                    <img src="<%= repositories.avatar.link %>" alt="User Avatar">
+                    <p class="main-name">
+                        <%= repositories.global_name %>
+                    </p>
+                    <p class="age" id="account_age"></p>
+                </div>
+
+                <div class="main-bottom">
+                    <div class="b-left">
+                        <div class="kutu">
+                            <p class="text">User Name: </p>
+                            <p class="sonuc">
+                                <%= repositories.global_name %>
+                            </p>
+                        </div>
+
+                        <div class="kutu">
+                            <p class="text">User Tag: </p>
+                            <p class="sonuc">
+                                <%= repositories.tag %>
+                            </p>
+                        </div>
+
+                        <div class="kutu">
+                            <p class="text">User ID: </p>
+                            <p class="sonuc">
+                                <%= repositories.id %>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="b-right">
+                        <div class="kutu">
+                            <p class="text">Banner Color: </p>
+                            <p class="sonuc">
+                                <%= repositories.banner.color %>
+                            </p>
+                        </div>
+
+                        <div class="kutu">
+                            <p class="text">Banner Animated: </p>
+                            <p class="sonuc">
+                                <%= repositories.banner.is_animated %>
+                            </p>
+                        </div>
+
+                        <div class="kutu">
+                            <p class="text">Create At: </p>
+                            <p class="sonuc" id="created_at">
+                                <%= repositories.created_at %>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        var createdDate = '<%= repositories.created_at %>';
+                        var accountAge = calculateAccountAge(createdDate);
+
+                        document.getElementById('created_at').innerText = '' + formatDate(createdDate);
+                        document.getElementById('account_age').innerText = '' + accountAge + '';
+                    });
+
+                    function formatDate(dateString) {
+                        var options = { year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+                        var formattedDate = new Date(dateString).toLocaleDateString('tr-TR', options);
+                        return formattedDate;
+                    }
+
+                    function calculateAccountAge(createdDate) {
+                        var currentDate = new Date();
+                        var diffInMilliseconds = currentDate - new Date(createdDate);
+                        var diffInDays = Math.floor(diffInMilliseconds / (24 * 60 * 60 * 1000));
+
+                        if (diffInDays >= 365) {
+                            var diffInYears = Math.floor(diffInDays / 365);
+                            return diffInYears + 'Y';
+                        } else {
+                            return diffInDays + 'G';
+                        }
+                    }
+                </script>
+
+
+                <% } else { %>
+                   <p class="uyari">Lütfen Bir Kullanıcı ID'si Giriniz</p>
+            <% } %>
+
+        </div>
+    </div>
+    <script src="js/main.js"></script>
+
+</body>
+
+</html>
